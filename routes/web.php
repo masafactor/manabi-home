@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Inertia\Inertia;
+use App\Http\Controllers\Admin\SubjectController;
+
 
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
@@ -49,5 +51,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return Inertia::render('guardian/dashboard');
         })->name('dashboard');
     });
+    
+});
+
+Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('admin/dashboard');
+    })->name('dashboard');
+
+    Route::resource('subjects', SubjectController::class)
+        ->except(['show', 'destroy']);
+
+    Route::patch('subjects/{subject}/toggle-active', [SubjectController::class, 'toggleActive'])
+        ->name('subjects.toggle-active');
 });
 require __DIR__.'/settings.php';
