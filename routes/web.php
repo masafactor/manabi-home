@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\SubjectController;
+use App\Http\Controllers\Admin\LessonController;
 
 
 Route::inertia('/', 'welcome', [
@@ -64,5 +65,11 @@ Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(functi
 
     Route::patch('subjects/{subject}/toggle-active', [SubjectController::class, 'toggleActive'])
         ->name('subjects.toggle-active');
+
+    Route::resource('lessons', LessonController::class)
+    ->except(['show', 'destroy']);
+
+    Route::patch('lessons/{lesson}/toggle-status', [LessonController::class, 'toggleStatus'])
+        ->name('lessons.toggle-status');
 });
 require __DIR__.'/settings.php';
