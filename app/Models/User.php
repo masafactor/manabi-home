@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 #[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
@@ -52,7 +54,7 @@ class User extends Authenticatable
         return $this->role === 'guardian';
     }
 
-    public function guardianStudents()
+    public function guardianStudents(): BelongsToMany
     {
         return $this->belongsToMany(
             User::class,
@@ -62,7 +64,7 @@ class User extends Authenticatable
         )->withPivot('relationship')->withTimestamps();
     }
 
-    public function guardians()
+    public function guardians(): BelongsToMany
     {
         return $this->belongsToMany(
             User::class,
@@ -70,5 +72,10 @@ class User extends Authenticatable
             'student_id',
             'guardian_id'
         )->withPivot('relationship')->withTimestamps();
+    }
+
+    public function studentProfile(): HasOne
+    {
+        return $this->hasOne(StudentProfile::class);
     }
 }

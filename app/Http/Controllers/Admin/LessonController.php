@@ -23,6 +23,9 @@ class LessonController extends Controller
                 'id' => $lesson->id,
                 'subject_name' => $lesson->subject?->name,
                 'teacher_name' => $lesson->teacher?->name,
+                'school_stage' => $lesson->school_stage,
+                'school_stage_label' => $lesson->schoolStageLabel(),
+                'grade_label' => $lesson->gradeLabel(),
                 'grade' => $lesson->grade,
                 'unit_name' => $lesson->unit_name,
                 'title' => $lesson->title,
@@ -50,7 +53,7 @@ class LessonController extends Controller
     {
         $validated = $request->validate([
             'subject_id' => ['required', 'exists:subjects,id'],
-            'grade' => ['nullable', 'integer', 'min:1', 'max:12'],
+            'grade' => ['nullable', 'integer', 'min:1', 'max:6'],
             'unit_name' => ['nullable', 'string', 'max:255'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -58,6 +61,7 @@ class LessonController extends Controller
             'thumbnail_url' => ['nullable', 'url', 'max:2000'],
             'status' => ['required', 'in:draft,published,archived'],
             'sort_order' => ['required', 'integer', 'min:0'],
+            'school_stage' => ['required', 'in:elementary,junior_high,high_school'],
         ]);
 
         $validated['teacher_id'] = $request->user()->id;
@@ -84,6 +88,7 @@ class LessonController extends Controller
                 'thumbnail_url' => $lesson->thumbnail_url,
                 'status' => $lesson->status,
                 'sort_order' => $lesson->sort_order,
+                'school_stage' => $lesson->school_stage,
             ],
             'subjects' => $this->subjectOptions(),
         ]);
@@ -93,7 +98,8 @@ class LessonController extends Controller
     {
         $validated = $request->validate([
             'subject_id' => ['required', 'exists:subjects,id'],
-            'grade' => ['nullable', 'integer', 'min:1', 'max:12'],
+            'school_stage' => ['required', 'in:elementary,junior_high,high_school'],
+            'grade' => ['nullable', 'integer', 'min:1', 'max:6'],
             'unit_name' => ['nullable', 'string', 'max:255'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],

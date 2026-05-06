@@ -1,5 +1,5 @@
 export type LessonStatus = 'draft' | 'published' | 'archived';
-
+export type SchoolStage = 'elementary' | 'junior_high' | 'high_school';
 export type Lesson = {
     id: number;
     subject_name: string | null;
@@ -18,6 +18,7 @@ export type Lesson = {
 export type LessonForm = {
     subject_id: number | '';
     grade: number | '';
+    school_stage: SchoolStage;
     unit_name: string;
     title: string;
     description: string;

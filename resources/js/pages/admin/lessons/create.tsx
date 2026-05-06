@@ -17,6 +17,7 @@ export default function AdminLessonsCreate({ subjects }: Props) {
         video_url: '',
         thumbnail_url: '',
         status: 'draft',
+        school_stage: 'junior_high',
         sort_order: 0,
     });
 
@@ -51,6 +52,24 @@ export default function AdminLessonsCreate({ subjects }: Props) {
                     </select>
                     {errors.subject_id && (
                         <p className="mt-1 text-sm text-red-600">{errors.subject_id}</p>
+                    )}
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium">学校種別</label>
+                    <select
+                        value={data.school_stage}
+                        onChange={(e) =>
+                            setData('school_stage', e.target.value as LessonForm['school_stage'])
+                        }
+                        className="mt-1 w-full rounded-md border px-3 py-2"
+                    >
+                        <option value="elementary">小学校</option>
+                        <option value="junior_high">中学校</option>
+                        <option value="high_school">高校</option>
+                    </select>
+                    {errors.school_stage && (
+                        <p className="mt-1 text-sm text-red-600">{errors.school_stage}</p>
                     )}
                 </div>
 
