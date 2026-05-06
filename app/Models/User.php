@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
@@ -77,5 +78,10 @@ class User extends Authenticatable
     public function studentProfile(): HasOne
     {
         return $this->hasOne(StudentProfile::class);
+    }
+
+    public function lessonViews(): HasMany
+    {
+        return $this->hasMany(LessonView::class, 'student_id');
     }
 }

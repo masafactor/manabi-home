@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Lesson extends Model
 {
@@ -66,5 +67,10 @@ class Lesson extends Model
         }
 
         return $this->schoolStageLabel() . $this->grade . '年';
+    }
+
+    public function lessonViews(): HasMany
+    {
+        return $this->hasMany(LessonView::class);
     }
 }

@@ -5,6 +5,7 @@ use Laravel\Fortify\Features;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\LessonController;
+use App\Http\Controllers\Student\LessonController as StudentLessonController;
 
 
 Route::inertia('/', 'welcome', [
@@ -71,5 +72,20 @@ Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(functi
 
     Route::patch('lessons/{lesson}/toggle-status', [LessonController::class, 'toggleStatus'])
         ->name('lessons.toggle-status');
+});
+
+Route::middleware(['role:student'])->prefix('student')->name('student.')->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('student/dashboard');
+    })->name('dashboard');
+
+    Route::get('/lessons', [StudentLessonController::class, 'index'])
+        ->name('lessons.index');
+
+    Route::get('/lessons/{lesson}', [StudentLessonController::class, 'show'])
+        ->name('lessons.show');
+
+    Route::post('/lessons/{lesson}/complete', [StudentLessonController::class, 'complete'])
+        ->name('lessons.complete');
 });
 require __DIR__.'/settings.php';
