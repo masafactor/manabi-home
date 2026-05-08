@@ -30,6 +30,17 @@ export default function AdminDashboard() {
                         生徒が視聴する授業動画を登録・編集します。
                     </p>
                 </Link>
+
+                <Link
+                    href={route('admin.students.index')}
+                    className="rounded-lg border bg-white p-5 hover:bg-gray-50"
+                >
+                    <h2 className="text-lg font-semibold">生徒管理</h2>
+                    <p className="mt-2 text-sm text-gray-600">
+                        生徒の学校種別・学年などを設定します。
+                    </p>
+                </Link>
+                
             </div>
         </div>
     );

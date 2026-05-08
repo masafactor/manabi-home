@@ -6,7 +6,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Student\LessonController as StudentLessonController;
-
+use App\Http\Controllers\Admin\StudentController;
 
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
@@ -72,6 +72,17 @@ Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(functi
 
     Route::patch('lessons/{lesson}/toggle-status', [LessonController::class, 'toggleStatus'])
         ->name('lessons.toggle-status');
+
+
+    Route::get('students', [StudentController::class, 'index'])
+    ->name('students.index');
+
+    Route::get('students/{student}/profile/edit', [StudentController::class, 'editProfile'])
+        ->name('students.profile.edit');
+
+    Route::put('students/{student}/profile', [StudentController::class, 'updateProfile'])
+        ->name('students.profile.update');
+        
 });
 
 Route::middleware(['role:student'])->prefix('student')->name('student.')->group(function () {
