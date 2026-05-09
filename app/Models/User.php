@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
 #[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
@@ -88,5 +89,9 @@ class User extends Authenticatable
     public function learningLogs(): HasMany
     {
         return $this->hasMany(LearningLog::class, 'student_id');
+    }
+    public function quizAttempts(): HasMany
+    {
+        return $this->hasMany(QuizAttempt::class, 'student_id');
     }
 }

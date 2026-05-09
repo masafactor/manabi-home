@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\QuizController;
 use App\Http\Controllers\Student\QuizController as StudentQuizController;
 use App\Http\Controllers\Student\LearningLogController;
+use App\Http\Controllers\Guardian\StudentController as GuardianStudentController;
 
 
 Route::inertia('/', 'welcome', [
@@ -123,5 +124,17 @@ Route::middleware(['role:student'])->prefix('student')->name('student.')->group(
     Route::resource('learning-logs', LearningLogController::class)
     ->only(['index', 'create', 'store', 'edit', 'update']);
         
+});
+
+Route::middleware(['role:guardian'])->prefix('guardian')->name('guardian.')->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('guardian/dashboard');
+    })->name('dashboard');
+
+    Route::get('/students', [GuardianStudentController::class, 'index'])
+        ->name('students.index');
+
+    Route::get('/students/{student}', [GuardianStudentController::class, 'show'])
+        ->name('students.show');
 });
 require __DIR__.'/settings.php';
