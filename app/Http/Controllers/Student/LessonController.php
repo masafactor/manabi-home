@@ -71,6 +71,7 @@ class LessonController extends Controller
     public function show(Request $request, Lesson $lesson): Response
     {
         abort_unless($lesson->status === 'published', 404);
+        $lesson->load(['subject', 'quizzes']);
 
         $user = $request->user();
         $profile = $user->studentProfile;
@@ -82,6 +83,8 @@ class LessonController extends Controller
                 403
             );
         }
+
+        
 
         $lessonView = LessonView::firstOrCreate(
             [
@@ -109,6 +112,13 @@ class LessonController extends Controller
                 'is_completed' => $lessonView->is_completed,
                 'completed_at' => $lessonView->completed_at?->format('Y-m-d H:i'),
                 'memo' => $lessonView->memo,
+                'quizzes' => $lesson->quizzes
+                    ->where('status', 'published')
+                    ->map(fn ($quiz) => [
+                        'id' => $quiz->id,
+                        'title' => $quiz->title,
+                    ])
+                    ->values(),
             ],
         ]);
     }

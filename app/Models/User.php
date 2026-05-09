@@ -84,4 +84,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(LessonView::class, 'student_id');
     }
+
+    public function learningLogs(): HasMany
+    {
+        return $this->hasMany(LearningLog::class, 'student_id');
+    }
 }

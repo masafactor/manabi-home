@@ -7,6 +7,10 @@ use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Student\LessonController as StudentLessonController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\QuizController;
+use App\Http\Controllers\Student\QuizController as StudentQuizController;
+use App\Http\Controllers\Student\LearningLogController;
+
 
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
@@ -82,6 +86,13 @@ Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(functi
 
     Route::put('students/{student}/profile', [StudentController::class, 'updateProfile'])
         ->name('students.profile.update');
+
+
+    Route::resource('quizzes', QuizController::class)
+    ->only(['index', 'create', 'store']);
+
+    Route::patch('quizzes/{quiz}/toggle-status', [QuizController::class, 'toggleStatus'])
+        ->name('quizzes.toggle-status');
         
 });
 
@@ -98,5 +109,19 @@ Route::middleware(['role:student'])->prefix('student')->name('student.')->group(
 
     Route::post('/lessons/{lesson}/complete', [StudentLessonController::class, 'complete'])
         ->name('lessons.complete');
+
+
+    Route::get('/quizzes/{quiz}', [StudentQuizController::class, 'show'])
+    ->name('quizzes.show');
+
+    Route::post('/quizzes/{quiz}/submit', [StudentQuizController::class, 'submit'])
+        ->name('quizzes.submit');
+
+    Route::get('/quiz-attempts/{attempt}', [StudentQuizController::class, 'result'])
+        ->name('quiz-attempts.show');
+
+    Route::resource('learning-logs', LearningLogController::class)
+    ->only(['index', 'create', 'store', 'edit', 'update']);
+        
 });
 require __DIR__.'/settings.php';

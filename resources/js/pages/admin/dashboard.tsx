@@ -40,7 +40,17 @@ export default function AdminDashboard() {
                         生徒の学校種別・学年などを設定します。
                     </p>
                 </Link>
-                
+
+                <Link
+                    href={route('admin.quizzes.index')}
+                    className="rounded-lg border bg-white p-5 hover:bg-gray-50"
+                >
+                    <h2 className="text-lg font-semibold">小テスト管理</h2>
+                    <p className="mt-2 text-sm text-gray-600">
+                        授業動画に紐づく小テストを登録・管理します。
+                    </p>
+                </Link>
+
             </div>
         </div>
     );

@@ -28,6 +28,10 @@ export type StudentLessonDetail = {
     is_completed: boolean;
     completed_at: string | null;
     memo: string | null;
+    quizzes: {
+    id: number;
+    title: string;
+    }[];
 };
 
 export type StudentProfileSummary = {
@@ -36,3 +40,4 @@ export type StudentProfileSummary = {
     grade: number | null;
     grade_label: string;
 };
+

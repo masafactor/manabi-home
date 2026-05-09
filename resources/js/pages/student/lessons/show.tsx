@@ -105,6 +105,23 @@ export default function StudentLessonsShow({ lesson }: Props) {
                             視聴完了にする
                         </button>
                     </div>
+                    {lesson.quizzes.length > 0 && (
+                        <div className="rounded-lg border bg-white p-6">
+                            <h2 className="mb-3 text-lg font-semibold">小テスト</h2>
+
+                            <div className="space-y-2">
+                                {lesson.quizzes.map((quiz) => (
+                                    <Link
+                                        key={quiz.id}
+                                        href={route('student.quizzes.show', quiz.id)}
+                                        className="block rounded-md border px-4 py-3 hover:bg-gray-50"
+                                    >
+                                        {quiz.title}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </form>
             </div>
         </div>

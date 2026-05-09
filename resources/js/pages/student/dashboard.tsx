@@ -20,6 +20,16 @@ export default function StudentDashboard() {
                         自分の学年に合った授業動画を確認します。
                     </p>
                 </Link>
+
+                <Link
+                    href={route('student.learning-logs.index')}
+                    className="rounded-lg border bg-white p-5 hover:bg-gray-50"
+                >
+                    <h2 className="text-lg font-semibold">学習記録</h2>
+                    <p className="mt-2 text-sm text-gray-600">
+                        今日できたことや、分かったことを記録します。
+                    </p>
+                </Link>
             </div>
         </div>
     );
