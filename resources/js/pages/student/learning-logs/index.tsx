@@ -84,8 +84,34 @@ export default function StudentLearningLogsIndex({ logs }: Props) {
                                     </p>
                                 </div>
                             )}
+
+                            {log.comments.length > 0 && (
+                                <div className="mt-4 border-t pt-4">
+                                    <h3 className="text-sm font-semibold">先生コメント</h3>
+
+                                    <div className="mt-3 space-y-2">
+                                        {log.comments.map((comment) => (
+                                            <div key={comment.id} className="rounded-md bg-gray-50 p-3">
+                                                <p className="text-sm font-medium">
+                                                    {comment.teacher_name ?? '先生'}
+                                                </p>
+                                                <p className="mt-1 whitespace-pre-wrap text-sm text-gray-700">
+                                                    {comment.comment}
+                                                </p>
+                                                {comment.created_at && (
+                                                    <p className="mt-1 text-xs text-gray-500">
+                                                        {comment.created_at}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ))}
+
+                
                 </div>
             )}
         </div>

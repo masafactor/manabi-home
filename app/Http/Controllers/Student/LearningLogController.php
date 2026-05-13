@@ -14,20 +14,27 @@ class LearningLogController extends Controller
     public function index(Request $request): Response
     {
         $logs = LearningLog::query()
-            ->where('student_id', $request->user()->id)
-            ->orderByDesc('log_date')
-            ->get()
-            ->map(fn (LearningLog $log) => [
-                'id' => $log->id,
-                'log_date' => $log->log_date?->format('Y-m-d'),
-                'did_text' => $log->did_text,
-                'understood_text' => $log->understood_text,
-                'difficult_text' => $log->difficult_text,
-                'question_text' => $log->question_text,
-                'mood' => $log->mood,
-                'mood_label' => $log->moodLabel(),
-                'created_at' => $log->created_at?->format('Y-m-d H:i'),
-            ]);
+    ->with(['comments.teacher'])
+    ->where('student_id', $request->user()->id)
+    ->orderByDesc('log_date')
+    ->get()
+    ->map(fn (LearningLog $log) => [
+        'id' => $log->id,
+        'log_date' => $log->log_date?->format('Y-m-d'),
+        'did_text' => $log->did_text,
+        'understood_text' => $log->understood_text,
+        'difficult_text' => $log->difficult_text,
+        'question_text' => $log->question_text,
+        'mood' => $log->mood,
+        'mood_label' => $log->moodLabel(),
+        'created_at' => $log->created_at?->format('Y-m-d H:i'),
+        'comments' => $log->comments->map(fn ($comment) => [
+            'id' => $comment->id,
+            'teacher_name' => $comment->teacher?->name,
+            'comment' => $comment->comment,
+            'created_at' => $comment->created_at?->format('Y-m-d H:i'),
+        ]),
+    ]);
 
         return Inertia::render('student/learning-logs/index', [
             'logs' => $logs,

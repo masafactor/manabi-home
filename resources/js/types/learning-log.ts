@@ -10,6 +10,12 @@ export type LearningLog = {
     mood: Mood;
     mood_label: string;
     created_at?: string;
+    comments: {
+    id: number;
+    teacher_name: string | null;
+    comment: string;
+    created_at: string | null;
+}[];
 };
 
 export type LearningLogForm = {
@@ -20,3 +26,4 @@ export type LearningLogForm = {
     question_text: string;
     mood: Mood;
 };
+

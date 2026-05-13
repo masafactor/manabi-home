@@ -11,7 +11,8 @@ use App\Http\Controllers\Admin\QuizController;
 use App\Http\Controllers\Student\QuizController as StudentQuizController;
 use App\Http\Controllers\Student\LearningLogController;
 use App\Http\Controllers\Guardian\StudentController as GuardianStudentController;
-
+use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
+use App\Http\Controllers\Teacher\LearningLogCommentController;
 
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
@@ -45,6 +46,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', function () {
             return Inertia::render('teacher/dashboard');
         })->name('dashboard');
+
+        Route::get('/students', [TeacherStudentController::class, 'index'])
+            ->name('students.index');
+
+        Route::get('/students/{student}', [TeacherStudentController::class, 'show'])
+            ->name('students.show');
+
+        Route::post('/learning-logs/{learningLog}/comments', [LearningLogCommentController::class, 'store'])
+            ->name('learning-logs.comments.store');
+
+        Route::delete('/learning-log-comments/{comment}', [LearningLogCommentController::class, 'destroy'])
+            ->name('learning-log-comments.destroy');
     });
 
     Route::middleware(['role:student'])->prefix('student')->name('student.')->group(function () {
@@ -94,6 +107,19 @@ Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(functi
 
     Route::patch('quizzes/{quiz}/toggle-status', [QuizController::class, 'toggleStatus'])
         ->name('quizzes.toggle-status');
+
+
+    Route::post('students/{student}/guardians', [StudentController::class, 'attachGuardian'])
+    ->name('students.guardians.attach');
+
+    Route::delete('students/{student}/guardians/{guardian}', [StudentController::class, 'detachGuardian'])
+        ->name('students.guardians.detach');
+
+    Route::post('students/{student}/teachers', [StudentController::class, 'attachTeacher'])
+    ->name('students.teachers.attach');
+
+    Route::delete('students/{student}/teachers/{teacher}', [StudentController::class, 'detachTeacher'])
+        ->name('students.teachers.detach');
         
 });
 

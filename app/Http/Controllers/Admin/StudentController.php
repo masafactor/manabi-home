@@ -44,6 +44,45 @@ class StudentController extends Controller
 
         $profile = $student->studentProfile;
 
+        $guardianOptions = User::query()
+            ->where('role', 'guardian')
+            ->orderBy('id')
+            ->get(['id', 'name', 'email'])
+            ->map(fn (User $guardian) => [
+                'id' => $guardian->id,
+                'name' => $guardian->name,
+                'email' => $guardian->email,
+            ]);
+
+        $guardians = $student->guardians()
+            ->get()
+            ->map(fn (User $guardian) => [
+                'id' => $guardian->id,
+                'name' => $guardian->name,
+                'email' => $guardian->email,
+                'relationship' => $guardian->pivot->relationship,
+            ]);
+
+
+            $teacherOptions = User::query()
+            ->where('role', 'teacher')
+            ->orderBy('id')
+            ->get(['id', 'name', 'email'])
+            ->map(fn (User $teacher) => [
+                'id' => $teacher->id,
+                'name' => $teacher->name,
+                'email' => $teacher->email,
+            ]);
+
+        $teachers = $student->teachers()
+            ->get()
+            ->map(fn (User $teacher) => [
+                'id' => $teacher->id,
+                'name' => $teacher->name,
+                'email' => $teacher->email,
+                'relationship' => $teacher->pivot->relationship,
+            ]);
+
         return Inertia::render('admin/students/profile-edit', [
             'student' => [
                 'id' => $student->id,
@@ -56,6 +95,10 @@ class StudentController extends Controller
                 'school_name' => $profile?->school_name ?? '',
                 'note' => $profile?->note ?? '',
             ],
+            'guardianOptions' => $guardianOptions,
+            'guardians' => $guardians,
+            'teacherOptions' => $teacherOptions,
+            'teachers' => $teachers,
         ]);
     }
 
@@ -83,5 +126,69 @@ class StudentController extends Controller
         return redirect()
             ->route('admin.students.index')
             ->with('success', '生徒プロフィールを更新しました。');
+    }
+
+    public function attachGuardian(Request $request, User $student): RedirectResponse
+    {
+        abort_unless($student->role === 'student', 404);
+
+        $validated = $request->validate([
+            'guardian_id' => ['required', 'exists:users,id'],
+            'relationship' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $guardian = User::findOrFail($validated['guardian_id']);
+
+        abort_if($guardian->role !== 'guardian', 422, '選択されたユーザーは保護者ではありません。');
+
+        $student->guardians()->syncWithoutDetaching([
+            $guardian->id => [
+                'relationship' => $validated['relationship'] ?? null,
+            ],
+        ]);
+
+        return back()->with('success', '保護者を紐づけました。');
+    }
+
+    public function detachGuardian(User $student, User $guardian): RedirectResponse
+    {
+        abort_unless($student->role === 'student', 404);
+        abort_unless($guardian->role === 'guardian', 404);
+
+        $student->guardians()->detach($guardian->id);
+
+        return back()->with('success', '保護者の紐づけを解除しました。');
+    }
+
+    public function attachTeacher(Request $request, User $student): RedirectResponse
+    {
+        abort_unless($student->role === 'student', 404);
+
+        $validated = $request->validate([
+            'teacher_id' => ['required', 'exists:users,id'],
+            'relationship' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $teacher = User::findOrFail($validated['teacher_id']);
+
+        abort_if($teacher->role !== 'teacher', 422, '選択されたユーザーは先生ではありません。');
+
+        $student->teachers()->syncWithoutDetaching([
+            $teacher->id => [
+                'relationship' => $validated['relationship'] ?? null,
+            ],
+        ]);
+
+        return back()->with('success', '先生を紐づけました。');
+    }
+
+    public function detachTeacher(User $student, User $teacher): RedirectResponse
+    {
+        abort_unless($student->role === 'student', 404);
+        abort_unless($teacher->role === 'teacher', 404);
+
+        $student->teachers()->detach($teacher->id);
+
+        return back()->with('success', '先生の紐づけを解除しました。');
     }
 }

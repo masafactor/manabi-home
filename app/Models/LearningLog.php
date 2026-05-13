@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class LearningLog extends Model
 {
@@ -41,5 +42,12 @@ class LearningLog extends Model
             'hard' => 'しんどい',
             default => '未選択',
         };
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(LearningLogComment::class)
+            ->with('teacher')
+            ->orderBy('created_at');
     }
 }
