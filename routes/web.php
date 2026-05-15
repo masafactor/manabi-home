@@ -13,6 +13,7 @@ use App\Http\Controllers\Student\LearningLogController;
 use App\Http\Controllers\Guardian\StudentController as GuardianStudentController;
 use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
 use App\Http\Controllers\Teacher\LearningLogCommentController;
+use App\Http\Controllers\Teacher\MonthlyReportController as TeacherMonthlyReportController;
 
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
@@ -58,6 +59,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::delete('/learning-log-comments/{comment}', [LearningLogCommentController::class, 'destroy'])
             ->name('learning-log-comments.destroy');
+
+        Route::get('/students/{student}/monthly-report', [TeacherMonthlyReportController::class, 'show'])
+            ->name('students.monthly-report');
     });
 
     Route::middleware(['role:student'])->prefix('student')->name('student.')->group(function () {
