@@ -33,6 +33,15 @@ export default function GuardianStudentsShow({
                     ← 生徒一覧へ戻る
                 </Link>
 
+                <div className="mt-4">
+                    <Link
+                        href={route('guardian.students.monthly-report', student.id)}
+                        className="inline-flex rounded-md border px-4 py-2 text-sm"
+                    >
+                        月次レポートを見る
+                    </Link>
+                </div>
+
                 <h1 className="mt-4 text-2xl font-bold">{student.name} さんの学習状況</h1>
 
                 <p className="mt-1 text-gray-600">

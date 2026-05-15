@@ -14,6 +14,8 @@ use App\Http\Controllers\Guardian\StudentController as GuardianStudentController
 use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
 use App\Http\Controllers\Teacher\LearningLogCommentController;
 use App\Http\Controllers\Teacher\MonthlyReportController as TeacherMonthlyReportController;
+use App\Http\Controllers\Guardian\MonthlyReportController as GuardianMonthlyReportController;
+
 
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
@@ -166,5 +168,8 @@ Route::middleware(['role:guardian'])->prefix('guardian')->name('guardian.')->gro
 
     Route::get('/students/{student}', [GuardianStudentController::class, 'show'])
         ->name('students.show');
+
+    Route::get('/students/{student}/monthly-report', [GuardianMonthlyReportController::class, 'show'])
+    ->name('students.monthly-report');
 });
 require __DIR__.'/settings.php';
