@@ -16,6 +16,7 @@ use App\Http\Controllers\Teacher\LearningLogCommentController;
 use App\Http\Controllers\Teacher\MonthlyReportController as TeacherMonthlyReportController;
 use App\Http\Controllers\Guardian\MonthlyReportController as GuardianMonthlyReportController;
 use App\Http\Controllers\Student\MonthlyReportController as StudentMonthlyReportController;
+use App\Http\Controllers\Admin\UserController;
 
 
 Route::inertia('/', 'welcome', [
@@ -44,6 +45,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', function () {
             return Inertia::render('admin/dashboard');
         })->name('dashboard');
+
+        Route::resource('users', UserController::class)
+        ->except(['show', 'destroy']);
     });
 
     Route::middleware(['role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {

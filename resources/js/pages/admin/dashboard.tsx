@@ -51,6 +51,16 @@ export default function AdminDashboard() {
                     </p>
                 </Link>
 
+                <Link
+                    href={route('admin.users.index')}
+                    className="rounded-lg border bg-white p-5 hover:bg-gray-50"
+                >
+                    <h2 className="text-lg font-semibold">ユーザー管理</h2>
+                    <p className="mt-2 text-sm text-gray-600">
+                        管理者・先生・生徒・保護者のユーザーを管理します。
+                    </p>
+                </Link>
+
             </div>
         </div>
     );
