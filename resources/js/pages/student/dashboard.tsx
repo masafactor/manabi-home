@@ -30,6 +30,16 @@ export default function StudentDashboard() {
                         今日できたことや、分かったことを記録します。
                     </p>
                 </Link>
+
+                <Link
+                    href={route('student.monthly-report')}
+                    className="rounded-lg border bg-white p-5 hover:bg-gray-50"
+                >
+                    <h2 className="text-lg font-semibold">月次レポート</h2>
+                    <p className="mt-2 text-sm text-gray-600">
+                        今月の授業視聴、確認テスト、学習記録を確認します。
+                    </p>
+                </Link>
             </div>
         </div>
     );

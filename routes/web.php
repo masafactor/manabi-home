@@ -15,6 +15,7 @@ use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
 use App\Http\Controllers\Teacher\LearningLogCommentController;
 use App\Http\Controllers\Teacher\MonthlyReportController as TeacherMonthlyReportController;
 use App\Http\Controllers\Guardian\MonthlyReportController as GuardianMonthlyReportController;
+use App\Http\Controllers\Student\MonthlyReportController as StudentMonthlyReportController;
 
 
 Route::inertia('/', 'welcome', [
@@ -155,6 +156,9 @@ Route::middleware(['role:student'])->prefix('student')->name('student.')->group(
 
     Route::resource('learning-logs', LearningLogController::class)
     ->only(['index', 'create', 'store', 'edit', 'update']);
+
+    Route::get('/monthly-report', [StudentMonthlyReportController::class, 'show'])
+    ->name('monthly-report');
         
 });
 
