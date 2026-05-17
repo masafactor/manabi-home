@@ -47,6 +47,12 @@ export default function StudentMonthlyReportShow({
                 >
                     ← ダッシュボードへ戻る
                 </Link>
+                <a
+                    href={`${route('student.monthly-report.pdf')}?month=${month}`}
+                    className="inline-flex rounded-md border px-4 py-2 text-sm"
+                >
+                    PDF出力
+                </a>
 
                 <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
                     <div>

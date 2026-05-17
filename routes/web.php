@@ -69,6 +69,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/students/{student}/monthly-report', [TeacherMonthlyReportController::class, 'show'])
             ->name('students.monthly-report');
+
+        Route::get('/students/{student}/monthly-report/pdf', [TeacherMonthlyReportController::class, 'pdf'])
+            ->name('students.monthly-report.pdf');
     });
 
     Route::middleware(['role:student'])->prefix('student')->name('student.')->group(function () {
@@ -163,6 +166,9 @@ Route::middleware(['role:student'])->prefix('student')->name('student.')->group(
 
     Route::get('/monthly-report', [StudentMonthlyReportController::class, 'show'])
     ->name('monthly-report');
+
+    Route::get('/monthly-report/pdf', [StudentMonthlyReportController::class, 'pdf'])
+    ->name('monthly-report.pdf');
         
 });
 
@@ -179,5 +185,8 @@ Route::middleware(['role:guardian'])->prefix('guardian')->name('guardian.')->gro
 
     Route::get('/students/{student}/monthly-report', [GuardianMonthlyReportController::class, 'show'])
     ->name('students.monthly-report');
+
+    Route::get('/students/{student}/monthly-report/pdf', [GuardianMonthlyReportController::class, 'pdf'])
+    ->name('students.monthly-report.pdf');
 });
 require __DIR__.'/settings.php';
